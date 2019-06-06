@@ -98,7 +98,7 @@ select avg(salario) as Média from tb_empregados;
 alter table tb_empregados
 add fk_cargo int(3);
 
--- Criando integridade referencial (relacionamento tb_empregados e tb_cargos)
+-- Criando integridade referencial entre tb_empregados e tb_cargos:
 alter table tb_empregados
 add foreign key (fk_cargo)
 references tb_cargos(cod_cargo);
