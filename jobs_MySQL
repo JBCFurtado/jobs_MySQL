@@ -1,0 +1,191 @@
+/**
+ *INSTITUTO FEDERAL DE EDUCAÇÃO, CIÊNCIA E TECNOLOGIA DO PARÁ
+ *CAMPUS ALTAMIRA
+ *TECNOLOGIA EM ANÁLISE E DESENVOLVIMENTO DE SISTEMAS
+ *PROFESSOR: RANIERI
+ *DIDCIPLINA: BANCO DE DADOS II
+ *JOSUÉ BATISTA CAMARÃO FURTADO
+ */
+create database jobs_MySQL
+default character set utf8
+default collate utf8_general_ci;
+
+use jobs_MySQL;
+-- CRIANDO A PRIMEIRA TABELA:
+create table tb_empregados(
+cod_empregado int(3) not null,
+nome_empregado varchar(45) not null,
+fone char(8),
+data_adm date not null,
+escolaridade varchar(15) not null,
+sexo enum('M','F') not null,
+data_nasc date not null,
+salario decimal(7,2) not null,
+comissao decimal(6,2),
+primary key (cod_empregado)
+)
+default charset = utf8;
+
+-- CRIANDO A SEGUNDA TABELA:
+create table tb_departamentos(
+cod_departamento int (3) not null,
+nome_departamento varchar (45) not null,
+gerente char(8),
+primary key (cod_departamento)
+)
+default charset = utf8;
+
+-- CRIANDO A TERCEIRA TABELA:
+create table tb_cargos(
+cod_cargo int (3) not null,
+nome_cargo varchar(45),
+primary key (cod_cargo)
+)
+default charset = utf8;
+
+-- INSERINDO FUNCIONÁRIOS NA TABELA EMPREGADOS:
+insert into tb_empregados
+(cod_empregado, nome_empregado, fone, data_adm, escolaridade, sexo, data_nasc, salario, comissao)
+values('001', 'Celia Dimas', '92712628', '2015-12-15', 'Superior','F', '1989-03-03', '4000.00', '540.00'),
+('002', 'João Raimundo', '92712629', '2015-12-18', 'Superior','M', '1989-03-03', '4000.00', '440.00'),
+('003', 'Paterson Araujo Jr', '92712659', '2010-07-15', 'Superior','M', '1986-09-13', '5000.00', '1010.00'),
+('004', 'Bill Gates', '92712030', '2018-11-10', 'Médio','M', '1990-09-03', '1200.00', '600.00'),
+('005', 'Ana Furtado Nunes', '92715623', '2011-12-15', 'Médio','F', '1985-03-10', '2500.00', '700.00'),
+('006', 'Steve Jobs', '92719080', '2005-12-15', 'Superior','M', '1989-03-03', '3000.00', '800.00'),
+('007', 'Paula Maria Cristina', '92712628', '2015-12-15', 'Superior','F', '1989-03-03', '2500.00', '550.00'),
+('008', 'Angenor Dias', '92710001', '2005-01-15', 'Superior','M', '1973-03-03', '5000.00', '1300.00'),
+('009', 'Pedro Paulo', '92718978', '2010-12-25', 'Fundamental','M', '1980-03-03', '1800.00', '300.00'),
+('010', 'Guilhermo Del Toro', '92712563', '2011-12-15', 'Fundamental','M', '1981-03-03', '1800.00', '400.00');
+
+-- INSERINDO DEPARTAMENTOS NA TABELA DEPARTAMENTOS.
+insert into tb_departamentos 
+(cod_departamento, nome_departamento, gerente)
+values ('001', 'Financeiro', '00000001'),
+('002', 'Tecnologia', '00000002'),
+('003', 'Recursos Humanos', '00000003'),
+('004', 'Contabilidade', '00000004');
+
+-- INSERINDO CARGOS NA TABELA CARGOS
+insert into tb_cargos
+(cod_cargo, nome_cargo)
+values ('001', 'Comprador'),
+('002', 'Motorista'),
+('003', 'Aux. Administrativo'),
+('004', 'Supervisor');
+ 
+-- 2.1 Todos os registros da tabela EMPREGADO, DEPARTAMENTO e CARGO.
+use jobs_MySQL;
+select *from tb_empregados;
+select *from tb_departamentos;
+select *from tb_cargos;
+
+-- 2.2  Selecionar o nome, nível de escolaridade e salário de todos os empregados recebem (salário + comissão) mais de R$ 3.000,00.
+select nome_empregado, escolaridade, salario
+from tb_empregados
+where (salario + comissao) > 3000.00;
+
+-- 2.3 - Selecionar o nome, nível de escolaridade e salário de todos os empregados recebem (salário + comissão) entre R$ 1.000,00 e R$ 3.000,00.
+select nome_empregado, escolaridade, salario
+from tb_empregados
+where (salario + comissao) between 1000.00 and 3000.00;
+
+-- 2.4  Mostrar a média salarial de todos os funcionário.
+select avg(salario) as Média from tb_empregados;
+
+-- Incluir as Chaves Estrangeiras
+
+-- Adicionando coluna de integridade referencial na TbEmpregados
+alter table tb_empregados
+add fk_cargo int(3);
+
+-- Criando integridade referencial (relacionamento TbEmpregados e TbCargo)
+alter table tb_empregados
+add foreign key (fk_cargo)
+references tb_cargos(cod_cargo);
+
+-- Adicionando coluna de integridade referencial na TbDepartamentos
+alter table tb_empregados
+add fk_departamento int(3);
+
+-- Criando integridade referencial (relacionamento TbEmpregados e TbDepartamentos)
+alter table tb_empregados
+add foreign key (fk_departamento)
+references tb_departamentos(cod_departamento);
+
+-- Adicionando coluna de integridade referencial na TbDepartamentos
+alter table tb_departamentos
+add fk_nome varchar(45);
+
+-- Inserindo dados de tabela com integridade referencial na TbEmpregados
+update tb_empregados set fk_departamento = 002 where cod_empregado = 001;
+update tb_empregados set fk_cargo = 004 where cod_empregado = 001;
+
+update tb_empregados set fk_departamento = 002 where cod_empregado = 002;
+update tb_empregados set fk_cargo = 004 where cod_empregado = 002;
+
+update tb_empregados set fk_departamento = 003 where cod_empregado = 003;
+update tb_empregados set fk_cargo = 003 where cod_empregado = 003;
+
+update tb_empregados set fk_departamento = 001 where cod_empregado = 004;
+update tb_empregados set fk_cargo = 003 where cod_empregado = 004;
+
+update tb_empregados set fk_departamento = 001 where cod_empregado = 005;
+update tb_empregados set fk_cargo = 001 where cod_empregado = 005;
+
+update tb_empregados set fk_departamento = 002 where cod_empregado = 006;
+update tb_empregados set fk_cargo = 003 where cod_empregado = 006;
+
+update tb_empregados set fk_departamento = 003 where cod_empregado = 007;
+update tb_empregados set fk_cargo = 002 where cod_empregado = 007;
+
+update tb_empregados set fk_departamento = 003 where cod_empregado = 008;
+update tb_empregados set fk_cargo = 004 where cod_empregado = 008;
+
+update tb_empregados set fk_departamento = 001 where cod_empregado = 009;
+update tb_empregados set fk_cargo = 003 where cod_empregado = 009;
+
+update tb_empregados set fk_departamento = 001 where cod_empregado = 010;
+update tb_empregados set fk_cargo = 001 where cod_empregado = 010;
+
+-- Inserindo dados de tabela com integridade referencial na TbDepartamentos
+update tb_departamentos set fk_nome = 001 where cod_departamento = 001;
+update tb_departamentos set fk_nome = 003 where cod_departamento = 002;
+
+update tb_departamentos set fk_nome = 002 where cod_departamento = 003;
+update tb_departamentos set fk_nome = 006 where cod_departamento = 004;
+
+-- 2.5 Mostrar todos os departamentos e os respectivos gerentes.
+select  tb_departamentos.cod_departamento,  tb_departamentos.nome_departamento, tb_departamentos.gerente, tb_empregados.nome_empregado
+from tb_departamentos inner join tb_empregados
+on tb_empregados.cod_empregado = tb_departamentos.fk_nome;
+ 
+-- 2.6 Mostrar todos os funcionário e seus respectivos cargos.
+select tb_empregados.nome_empregado, tb_cargos.nome_cargo
+from tb_empregados inner join tb_cargos
+on tb_cargos.cod_cargo = tb_empregados.fk_cargo;
+ 
+ -- 2.7 Mostrar o nome de todos os funcionários e dos respectivos e de seus departamentos.
+select tb_empregados.nome_empregado, tb_departamentos.nome_departamento
+from tb_empregados inner join tb_departamentos
+on tb_departamentos.cod_departamento = tb_empregados.fk_departamento;
+ 
+-- 2.8 Mostrar o nome de todos os funcionários e dos respectivos cargos.
+ select tb_empregados.nome_empregado, tb_departamentos.nome_departamento
+ from tb_empregados inner join tb_departamentos
+ on tb_departamentos.cod_departamento = tb_empregados.fk_departamento;
+ 
+ -- 2.9 Mostrar o quantitativo de cada cargo, ou seja, a quantidade total de empregados separados pelo cargo.
+select tb_cargos.nome_cargo, count(*) 
+from tb_empregados inner join tb_cargos 
+on tb_empregados.fk_cargo = tb_cargos.cod_cargo
+group by nome_cargo;
+
+-- 3.0 Mostrar a média salarial (somente o salário) de cada cargo.
+select tb_cargos.nome_cargo, avg (salario) 
+from tb_empregados inner join tb_cargos
+on tb_empregados.fk_cargo = tb_cargos.cod_cargo
+group by nome_cargo;
+
+/**Com grandes poderes vêm grandes responsabilidades
+ * Tio Ben (Filme Homem Aranha)
+ */ 
