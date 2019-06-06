@@ -94,29 +94,29 @@ select avg(salario) as Média from tb_empregados;
 
 -- Incluir as Chaves Estrangeiras
 
--- Adicionando coluna de integridade referencial na TbEmpregados
+-- Adicionando coluna de integridade referencial na tb_empregados
 alter table tb_empregados
 add fk_cargo int(3);
 
--- Criando integridade referencial (relacionamento TbEmpregados e TbCargo)
+-- Criando integridade referencial (relacionamento tb_empregados e tb_cargos)
 alter table tb_empregados
 add foreign key (fk_cargo)
 references tb_cargos(cod_cargo);
 
--- Adicionando coluna de integridade referencial na TbDepartamentos
+-- Adicionando coluna de integridade referencial na tb_departamentos
 alter table tb_empregados
 add fk_departamento int(3);
 
--- Criando integridade referencial (relacionamento TbEmpregados e TbDepartamentos)
+-- Criando integridade referencial entre (tb_empregados e tb_departamentos)
 alter table tb_empregados
 add foreign key (fk_departamento)
 references tb_departamentos(cod_departamento);
 
--- Adicionando coluna de integridade referencial na TbDepartamentos
+-- Adicionando coluna de integridade referencial na tb_departamentos
 alter table tb_departamentos
 add fk_nome varchar(45);
 
--- Inserindo dados de tabela com integridade referencial na TbEmpregados
+-- Inserindo dados de tabela com integridade referencial na tb_empregados
 update tb_empregados set fk_departamento = 002 where cod_empregado = 001;
 update tb_empregados set fk_cargo = 004 where cod_empregado = 001;
 
