@@ -6,11 +6,11 @@
  *DISCIPLINA: BANCO DE DADOS II
  *JOSUÉ BATISTA CAMARÃO FURTADO
  */
-create database jobs_MySQL
+create database bd_empresa
 default character set utf8
 default collate utf8_general_ci;
 
-use jobs_MySQL;
+use bd_empresa;
 -- CRIANDO A PRIMEIRA TABELA:
 create table tb_empregados(
 cod_empregado int(3) not null,
@@ -74,7 +74,7 @@ values ('001', 'Comprador'),
 ('004', 'Supervisor');
  
 -- 2.1 Todos os registros da tabela EMPREGADO, DEPARTAMENTO e CARGO:
-use jobs_MySQL;
+use bd_empresa;
 select *from tb_empregados;
 select *from tb_departamentos;
 select *from tb_cargos;

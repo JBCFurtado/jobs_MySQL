@@ -1,0 +1,125 @@
+create database bd_livros
+default character set utf8
+default collate utf8_general_ci;
+
+use bd_livros;
+create table tb_livros(
+cod_livro int(3) not null,
+titulo_livro varchar(45) not null,
+isbn varchar(13) unique,
+preco decimal (7,2) not null,
+primary key (cod_livro)
+)
+
+default charset = utf8;
+
+create table tb_autor(
+cod_autor int(3) not null,
+nome_autor varchar(45) not null,
+cpf varchar(11) not null,
+data_nasc date not null,
+primary key (cod_autor)
+)
+default charset = utf8;
+
+create table tb_editora(
+cod_editora int(3) not null,
+nome_editora varchar(45) not null,
+fone int,
+endereco varchar (45) not null,
+primary key (cod_editora)
+)
+default charset = utf8;
+
+use bd_livros;
+insert into tb_livros 
+(cod_livro, titulo_livro, isbn, preco)
+values 
+('001', 'Matemática', '0000000000001', '25.50'),
+('002', 'Tecnologia', '0000000000002', '30.50'),
+('003', 'Economia', '0000000000003' , '100.00'),
+('004', 'História', '0000000000004' , '15.00'),
+('005', 'Markenting', '0000000000005', '250.00');
+
+use bd_livros;
+insert into tb_autor 
+(cod_autor, nome_autor, cpf, data_nasc)
+values 
+('001', 'Arquimedes', '15548965478', '1986-05-14'),
+('002', 'Steve Jobs', '84568247548', '1975-06-15'),
+('003', 'Eike Batist','58625147893', '1970-12-16');
+
+use bd_livros;
+insert into tb_editora
+(cod_editora, nome_editora, fone, endereco)
+values 
+('001', 'Sextante', '939921548', 'Av. Independente 458'),
+('002', 'Novatec', '939921547', 'Rua Augusta 666'),
+('003', 'Terra','939911548', 'Cabanagem 420');
+
+use bd_livros;
+-- seleccionar todos os Livros
+select *from tb_livros;
+
+-- selecionar todas Editora
+select *from tb_editora;
+
+-- Selecionar todos os Autores
+select *from tb_autor;
+
+-- Média de Preços de Livros
+select avg(preco) as Média from tb_livros;
+
+-- Maior valor do Livro
+Select Max(preco) from tb_livros;
+
+-- Menor valor Livro
+Select Min(preco) from tb_livros;
+
+use bd_livros;
+-- Adicionando coluna de integridade referencial na tb_livros
+alter table tb_livros
+add fk_editora int(3);
+
+-- Criando integridade referencial (relacionamento tb_empregados e tb_cargos)
+alter table tb_livros
+add foreign key (fk_editora)
+references tb_editora(cod_editora);
+
+-- Adicionando coluna de integridade referencial na tb_departamentos
+alter table tb_livros
+add fk_autor int(3);
+
+-- Criando integridade referencial (relacionamento tb_empregados e tb_departamentos)
+alter table tb_livros
+add foreign key (fk_autor)
+references tb_autor(cod_autor);
+
+-- Adicionando coluna de integridade referencial na tb_departamentos
+alter table tb_autor
+add fk_nome_autor varchar(45);
+
+update tb_livros set fk_autor = 001 where cod_livro = 001;
+update tb_livros set fk_editora = 001 where cod_livro = 001;
+
+update tb_livros set fk_autor = 001 where cod_livro = 002;
+update tb_livros set fk_editora = 001 where cod_livro = 002;
+
+update tb_livros set fk_autor = 001 where cod_livro = 003;
+update tb_livros set fk_editora = 001 where cod_livro = 003;
+
+update tb_livros set fk_autor = 002 where cod_livro = 004;
+update tb_livros set fk_editora = 002 where cod_livro = 004;
+
+update tb_livros set fk_autor = 003 where cod_livro = 005;
+update tb_livros set fk_editora = 003 where cod_livro = 005;
+
+use bd_livros;
+select tb_livros.titulo_livro, tb_autor.nome_autor
+from tb_livros inner join tb_autor
+on tb_autor.cod_autor = tb_livros.fk_autor;
+
+select tb_livros.titulo_livro, tb_editora.nome_editora
+from tb_livros inner join tb_editora
+on tb_editora.cod_editora = tb_livros.fk_editora;
+
