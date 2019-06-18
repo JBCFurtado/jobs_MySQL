@@ -1,4 +1,4 @@
-create database bd_livros
+create database bd_livraria
 default character set utf8
 default collate utf8_general_ci;
 
@@ -13,7 +13,7 @@ primary key (cod_livro)
 
 default charset = utf8;
 
-create table tb_autor(
+create table tb_autores(
 cod_autor int(3) not null,
 nome_autor varchar(45) not null,
 cpf varchar(11) not null,
@@ -22,7 +22,7 @@ primary key (cod_autor)
 )
 default charset = utf8;
 
-create table tb_editora(
+create table tb_editoras(
 cod_editora int(3) not null,
 nome_editora varchar(45) not null,
 fone int,
@@ -42,7 +42,7 @@ values
 ('005', 'Markenting', '0000000000005', '250.00');
 
 use bd_livraria;
-insert into tb_autor 
+insert into tb_autores 
 (cod_autor, nome_autor, cpf, data_nasc)
 values 
 ('001', 'Arquimedes', '15548965478', '1986-05-14'),
@@ -50,7 +50,7 @@ values
 ('003', 'Eike Batist','58625147893', '1970-12-16');
 
 use bd_livraria;
-insert into tb_editora
+insert into tb_editoras
 (cod_editora, nome_editora, fone, endereco)
 values 
 ('001', 'Sextante', '939921548', 'Av. Independente 458'),
@@ -62,10 +62,10 @@ use bd_livraria;
 select *from tb_livros;
 
 -- selecionar todas Editora
-select *from tb_editora;
+select *from tb_editoras;
 
 -- Selecionar todos os Autores
-select *from tb_autor;
+select *from tb_autores;
 
 -- Média de Preços de Livros
 select avg(preco) as Média from tb_livros;
@@ -84,7 +84,7 @@ add fk_editora int(3);
 -- Criando integridade referencial (relacionamento tb_empregados e tb_cargos)
 alter table tb_livros
 add foreign key (fk_editora)
-references tb_editora(cod_editora);
+references tb_editoras(cod_editora);
 
 -- Adicionando coluna de integridade referencial na tb_departamentos
 alter table tb_livros
@@ -93,10 +93,10 @@ add fk_autor int(3);
 -- Criando integridade referencial (relacionamento tb_empregados e tb_departamentos)
 alter table tb_livros
 add foreign key (fk_autor)
-references tb_autor(cod_autor);
+references tb_autores(cod_autor);
 
 -- Adicionando coluna de integridade referencial na tb_departamentos
-alter table tb_autor
+alter table tb_autores
 add fk_nome_autor varchar(45);
 
 update tb_livros set fk_autor = 001 where cod_livro = 001;
@@ -115,11 +115,10 @@ update tb_livros set fk_autor = 003 where cod_livro = 005;
 update tb_livros set fk_editora = 003 where cod_livro = 005;
 
 use bd_livraria;
-select tb_livros.titulo_livro, tb_autor.nome_autor
-from tb_livros inner join tb_autor
-on tb_autor.cod_autor = tb_livros.fk_autor;
+select tb_livros.titulo_livro, tb_autores.nome_autor
+from tb_livros inner join tb_autores
+on tb_autores.cod_autor = tb_livros.fk_autor;
 
-select tb_livros.titulo_livro, tb_editora.nome_editora
-from tb_livros inner join tb_editora
-on tb_editora.cod_editora = tb_livros.fk_editora;
-
+select tb_livros.titulo_livro, tb_editoras.nome_editora
+from tb_livros inner join tb_editoras
+on tb_editoras.cod_editora = tb_livros.fk_editora;
